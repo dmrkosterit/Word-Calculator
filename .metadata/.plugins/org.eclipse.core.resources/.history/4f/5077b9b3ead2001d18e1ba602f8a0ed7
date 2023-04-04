@@ -1,0 +1,27 @@
+package textconversion;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+
+public class TextConversionActivator implements BundleActivator {
+
+    private TextConversionService textConversionService;
+    private ServiceRegistration<TextConversionService> registration;
+
+    public void start(BundleContext context) throws Exception {
+        // Create an instance of your TextConversionService
+        textConversionService = new TextConversionServiceImpl();
+        
+        // Register your TextConversionService with the OSGi Service Registry
+        registration = context.registerService(TextConversionService.class, textConversionService, null);
+    }
+
+    public void stop(BundleContext context) throws Exception {
+        // Unregister your TextConversionService from the OSGi Service Registry
+        registration.unregister();
+        registration = null;
+        
+        // Release any resources used by your TextConversionService
+        textConversionService = null;
+    }
+}

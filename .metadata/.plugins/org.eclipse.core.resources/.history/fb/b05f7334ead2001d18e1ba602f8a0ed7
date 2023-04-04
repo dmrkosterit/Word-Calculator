@@ -1,0 +1,5 @@
+package textconversion;
+
+public interface TextConversionInterface {
+
+}

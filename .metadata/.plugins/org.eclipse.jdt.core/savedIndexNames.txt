@@ -1,0 +1,4 @@
+INDEX VERSION 1.132+C:\Users\demir\Desktop\Workspace\Eclipse\DemirKosterit_Ekinoks\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+1279261027.index
+2441938283.index

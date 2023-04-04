@@ -1,0 +1,6 @@
+package textconversion;
+
+public interface TextConversionInterface {
+    int convertTextToNumbers(String text);
+    String convertNumberToText(int number);
+}
