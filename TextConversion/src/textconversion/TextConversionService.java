@@ -229,7 +229,6 @@ public class TextConversionService implements TextConversionInterface{
 	    }
 
 	    String result = resultBuilder.toString();
-	    result.replace("yüz", "yaz");
 	    return result;
 	}
 
