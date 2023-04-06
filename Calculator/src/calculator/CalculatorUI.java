@@ -117,7 +117,6 @@ public class CalculatorUI extends JFrame {
         setContentPane(mainPanel);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
     }
 
     private void performArithmeticOperation(CalculatorInterface.Operation operation) {
@@ -126,12 +125,12 @@ public class CalculatorUI extends JFrame {
         String input2 = inputField2.getText();
 
         // convert the input values to integers
-        int value1 = textConversionService.convertTextToNumber(input1);
-        int value2 = textConversionService.convertTextToNumber(input2);
+        double value1 = textConversionService.convertTextToNumber(input1);
+        double value2 = textConversionService.convertTextToNumber(input2);
 
         
         // perform the arithmetic operation
-        int result = 0;
+        double result = 0;
         switch (operation) {
             case ADD:
             	System.out.print(value1 + " + " + value2 + "\n");

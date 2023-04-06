@@ -1,6 +1,6 @@
 package textconversion;
 
 public interface TextConversionInterface {
-    int convertTextToNumber(String text);
-    String convertNumberToText(int number);
+    double convertTextToNumber(String text);
+    String convertNumberToText(double number);
 }

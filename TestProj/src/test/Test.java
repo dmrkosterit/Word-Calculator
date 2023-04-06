@@ -179,7 +179,7 @@ public class Test {
 
 		boolean negative = false;
 
-		String[] words = input.split("\\s+");
+		String[] words = input.split(" ");
 
 		if (words[0].equalsIgnoreCase("minus") || words[0].equalsIgnoreCase("eksi"))
 			negative = true;
@@ -224,15 +224,12 @@ public class Test {
 			number.negate();
 		}
 
-		// loop test here
-
 		if (number.compareTo(BigDecimal.valueOf(Math.pow(10, 6))) >= 0) {
 
-			for (double pow = 33.0; pow >= 6; pow -= 3) {
+			for (double pow = 33.0; pow >= 3; pow -= 3) {
 				if (number.compareTo(BigDecimal.valueOf(Math.pow(10, pow))) >= 0) {
-					BigDecimal kat = number.divide(BigDecimal.valueOf(Math.pow(10, pow)), 0, RoundingMode.FLOOR)
-							.setScale(0, RoundingMode.FLOOR).stripTrailingZeros();
-					result += (convertNumberToText(kat)) + (" ") + (numberWords.get(Math.pow(10, pow)));
+					BigDecimal digit = number.divide(BigDecimal.valueOf(Math.pow(10, pow)), 0, RoundingMode.FLOOR);
+					result += (convertNonExponentToText(digit)) + (" ") + (numberWords.get(Math.pow(10, pow)));
 					number = number.remainder(BigDecimal.valueOf(Math.pow(10, pow)));
 					if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
 						result += (" ");
@@ -240,22 +237,18 @@ public class Test {
 				}
 			}
 		}
-
-		// loop test ends
-
-		if (number.compareTo(BigDecimal.valueOf(1000)) >= 0) {
-			BigDecimal thousands = number.divide(BigDecimal.valueOf(1000), 0, RoundingMode.FLOOR)
-					.setScale(0, RoundingMode.FLOOR).stripTrailingZeros();
-			result += (convertNumberToText(thousands)) + (" ") + (numberWords.get(1000.0));
-			number = number.remainder(BigDecimal.valueOf(1000));
-			if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
-				result += (" ");
-			}
-		}
-
+		
+		result += convertNonExponentToText(number);
+		
+		return result.replaceAll("bir yüz", "yüz");
+	}
+	
+	public static String convertNonExponentToText(BigDecimal number) {
+		
+		String result = "";
+		
 		if (number.compareTo(BigDecimal.valueOf(100)) >= 0) {
-			BigDecimal hundreds = number.divide(BigDecimal.valueOf(100), 0, RoundingMode.FLOOR)
-					.setScale(0, RoundingMode.FLOOR).stripTrailingZeros();
+			BigDecimal hundreds = number.divide(BigDecimal.valueOf(100), 0, RoundingMode.FLOOR);
 			result += (numberWords.get(hundreds.doubleValue())) + (" ") + (numberWords.get(100.0));
 			number = number.remainder(BigDecimal.valueOf(100));
 			if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
@@ -276,7 +269,7 @@ public class Test {
 					result += (numberWords.get(tens * 10));
 				double ones = Math.floor(number.doubleValue() % 10);
 				if (ones >= 1) {
-					if (number.compareTo(BigDecimal.ZERO) == -1 || tens >= 1)
+					if (/*number.compareTo(BigDecimal.ZERO) == -1 ||*/ tens >= 1)
 						result += " " + numberWords.get(ones);
 					else
 						result += (numberWords.get(ones));
@@ -285,7 +278,7 @@ public class Test {
 			}
 		}
 
-		return result.replaceAll("bir yüz", "yüz");
+		return result;
 	}
 
 	public static void main(String[] args) {
@@ -301,11 +294,13 @@ public class Test {
 			
 			System.out.print("Enter a number in words: ");
 			inp = scan.nextLine();
+			scan.reset();
 			System.out.println(convertTextToNumber(inp));
 		}
 
 		System.out.println("Done");
 		scanner.close();
+		scan.close();
 	}
 
 }
