@@ -12,23 +12,20 @@ public class CalculatorActivator implements BundleActivator {
     private TextConversionService textConversionService;
     private CalculatorUI calculatorUI;
 
-    public void start(BundleContext context) throws Exception {
-        // Look up the TextConversionService using the OSGi Service Registry
+    public void start(BundleContext context) {
+    	
         ServiceReference<TextConversionService> ref = context.getServiceReference(TextConversionService.class);
         textConversionService = context.getService(ref);
 
-        // Initialize the CalculatorService with the TextConversionService
         calculatorService = new CalculatorService();
 
-        // Create and show the CalculatorUI
         calculatorUI = new CalculatorUI(textConversionService, calculatorService);
-        calculatorUI.show();
+        calculatorUI.setVisible(true);
         
         System.out.println("Calculator Service Started.");
     }
 
-    public void stop(BundleContext context) throws Exception {
-        // Dispose of the CalculatorUI and unregister the CalculatorService
+    public void stop(BundleContext context) {
         calculatorUI.dispose();
         context.ungetService(context.getServiceReference(TextConversionService.class));
         System.out.println("Calculator Service Stopped.");
