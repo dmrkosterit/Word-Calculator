@@ -179,10 +179,10 @@ public class CalculatorUI extends JFrame {
 			resultText = "ERROR: Empty input(s).";
 		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
 			resultText = "ERROR: Invalid character in input(s).";
-		} else if (input2.equalsIgnoreCase("zero")) {
+		} else if ((input2.equalsIgnoreCase("zero") || input2.equalsIgnoreCase("sıfır")) && operation == CalculatorInterface.Operation.DIVIDE) {
 			resultText = "ERROR: Cannot divide by zero.";
 		} else if (value1 == null || value2 == null) {
-			resultText = "ERROR: Invalid word(s) in input.";
+			resultText = "ERROR: Invalid format/word(s) in input.";
 		} else {
 			switch (operation) {
 			case ADD:

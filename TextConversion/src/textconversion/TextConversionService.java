@@ -14,12 +14,11 @@ public class TextConversionService implements TextConversionInterface {
 
 		setLocale(Locale.getDefault());
 
-
 	}
 
 	public void setLocale(Locale locale) {
 		Locale.setDefault(locale);
-		
+
 		if (Locale.getDefault().getLanguage().equals("tr")) {
 
 			wordNumbers.put("sıfır", BigDecimal.valueOf(0.0));
@@ -62,8 +61,8 @@ public class TextConversionService implements TextConversionInterface {
 			wordNumbers.put("septendesilyon", BigDecimal.valueOf(Math.pow(10, 54)));
 			wordNumbers.put("oktodesilyon", BigDecimal.valueOf(Math.pow(10, 57)));
 			wordNumbers.put("novemdesilyon", BigDecimal.valueOf(Math.pow(10, 60)));
-			wordNumbers.put("vignitilyon", BigDecimal.valueOf(Math.pow(10, 63)));
-			
+			wordNumbers.put("vigintilyon", BigDecimal.valueOf(Math.pow(10, 63)));
+
 			numberWords.put(0.0, "sıfır");
 			numberWords.put(1.0, "bir");
 			numberWords.put(2.0, "iki");
@@ -104,11 +103,12 @@ public class TextConversionService implements TextConversionInterface {
 			numberWords.put(Math.pow(10, 54), "septendesilyon");
 			numberWords.put(Math.pow(10, 57), "oktodesilyon");
 			numberWords.put(Math.pow(10, 60), "novemdesilyon");
-			numberWords.put(Math.pow(10, 63), "vignitilyon");
+			numberWords.put(Math.pow(10, 63), "vigintilyon");
 
 		} else {
 
 			wordNumbers.put("zero", BigDecimal.valueOf(0.0));
+			wordNumbers.put("a", BigDecimal.valueOf(1.0));
 			wordNumbers.put("one", BigDecimal.valueOf(1.0));
 			wordNumbers.put("two", BigDecimal.valueOf(2.0));
 			wordNumbers.put("three", BigDecimal.valueOf(3.0));
@@ -158,8 +158,7 @@ public class TextConversionService implements TextConversionInterface {
 			wordNumbers.put("octodecillion", BigDecimal.valueOf(Math.pow(10, 57)));
 			wordNumbers.put("novemdecillion", BigDecimal.valueOf(Math.pow(10, 60)));
 			wordNumbers.put("vigintillion", BigDecimal.valueOf(Math.pow(10, 63)));
-			
-			
+
 			numberWords.put(0.0, "zero");
 			numberWords.put(1.0, "one");
 			numberWords.put(2.0, "two");
@@ -209,11 +208,10 @@ public class TextConversionService implements TextConversionInterface {
 			numberWords.put(Math.pow(10, 54), "septendecillion");
 			numberWords.put(Math.pow(10, 57), "octodecillion");
 			numberWords.put(Math.pow(10, 60), "novemdecillion");
-			numberWords.put(Math.pow(10, 63), "vignitillion");
+			numberWords.put(Math.pow(10, 63), "vigintillion");
 		}
 	}
-	
-	
+
 	@Override
 	public BigDecimal convertTextToNumber(String input) {
 		BigDecimal total = BigDecimal.ZERO;
@@ -226,30 +224,51 @@ public class TextConversionService implements TextConversionInterface {
 		if (words[0].equalsIgnoreCase("minus") || words[0].equalsIgnoreCase("eksi"))
 			negative = true;
 
-		for (String word : words) {
+		for (int i = 0; i < words.length; i++) {
+			String word = words[i];
 			BigDecimal value = wordNumbers.get(word);
-			if (!word.equalsIgnoreCase("minus") && !word.equalsIgnoreCase("eksi") && !word.equalsIgnoreCase("and") && !word.equals(""))
-				if (value != null) {
+
+			if (value != null) {
+				if (i != 0 && words.length >= 2) {
+					if ((word.equals("minus") && word.equals("eksi"))
+							|| (wordNumbers.get(words[i - 1]).compareTo(BigDecimal.TEN) < 0
+									&& wordNumbers.get(words[i]).compareTo(BigDecimal.TEN) < 0))
+						return null;
+
+				}
+
+				if (value != null && (!word.equalsIgnoreCase("minus") || !word.equalsIgnoreCase("eksi") || !word.equalsIgnoreCase("and"))) {
+
 					if (value.compareTo(new BigDecimal(100)) == 0) {
 						currentNumber = currentNumber.multiply(value);
+							if(currentNumber.compareTo(BigDecimal.ZERO) == 0)
+								return null;
 					} else if (value.compareTo(new BigDecimal(100)) < 0) {
 						currentNumber = currentNumber.add(value);
 					} else {
-						total = total.add(currentNumber.multiply(value));
-						currentNumber = BigDecimal.ZERO;
+						if (currentNumber.compareTo(BigDecimal.ZERO) != 0) {
+							total = total.add(currentNumber.multiply(value));
+							currentNumber = BigDecimal.ZERO;
+						} else {
+							total = total.add(value);
+						}
 					}
-				} else {
-					return null;
 				}
+
+			} else {
+				return null;
+			}
+
 		}
 		total = total.add(currentNumber);
 		if (negative)
 			total = total.multiply(BigDecimal.valueOf(-1));
 		return total;
+
 	}
 
 	@Override
-	public  String convertNumberToText(BigDecimal input) {
+	public String convertNumberToText(BigDecimal input) {
 		BigDecimal number = input;
 
 		if (number.compareTo(BigDecimal.ZERO) == 0) {
@@ -272,7 +291,11 @@ public class TextConversionService implements TextConversionInterface {
 			for (double pow = 63.0; pow >= 3; pow -= 3) {
 				if (number.compareTo(BigDecimal.valueOf(Math.pow(10, pow))) >= 0) {
 					BigDecimal digit = number.divide(BigDecimal.valueOf(Math.pow(10, pow)), 0, RoundingMode.FLOOR);
-					result += (convertNonExponentToText(digit)) + (" ") + (numberWords.get(Math.pow(10, pow)));
+					
+					if(digit.compareTo(BigDecimal.ONE) == 0 && numberWords.get(Math.pow(10, pow)).equalsIgnoreCase("thousand") && Locale.getDefault().getLanguage().equals("tr"))
+						result += numberWords.get(Math.pow(10, pow));
+					else
+						result += (convertNonExponentToText(digit)) + (" ") + (numberWords.get(Math.pow(10, pow)));
 					number = number.remainder(BigDecimal.valueOf(Math.pow(10, pow)));
 					if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
 						result += (" ");
@@ -280,16 +303,18 @@ public class TextConversionService implements TextConversionInterface {
 				}
 			}
 		}
-		
+
+		if(!Locale.getDefault().getLanguage().equals("tr") && number.compareTo(BigDecimal.valueOf(100)) < 0 && !result.equals("") && ((!result.equals("minus ")) || !result.equals("eksi ")))
+			result += (" and ");
 		result += convertNonExponentToText(number);
-		
-		return result.replaceAll("bir yüz", "yüz").replaceAll("bir bin", "bin").replaceAll("  ", " ");
+
+		return result.replaceAll("bir yüz", "yüz").replaceAll("  ", " ");
 	}
-	
+
 	public String convertNonExponentToText(BigDecimal number) {
-		
+
 		String result = "";
-		
+
 		if (number.compareTo(BigDecimal.valueOf(100)) >= 0) {
 			BigDecimal hundreds = number.divide(BigDecimal.valueOf(100), 0, RoundingMode.FLOOR);
 			result += (numberWords.get(hundreds.doubleValue())) + (" ") + (numberWords.get(100.0));
