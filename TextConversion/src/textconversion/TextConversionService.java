@@ -12,7 +12,6 @@ public class TextConversionService implements TextConversionInterface {
 
 	public TextConversionService() {
 
-		//this.locale = new Locale("tr", "TR");
 		setLocale(Locale.getDefault());
 
 

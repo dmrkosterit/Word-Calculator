@@ -14,18 +14,31 @@ public class CalculatorUI extends JFrame {
 	private TextConversionInterface textConversionService;
 	private CalculatorInterface calculatorService;
 
+	private JComboBox<String> languageComboBox;
+	
 	private JTextField inputField1;
 	private JTextField inputField2;
 	private JTextField resultField;
+	
+	private JLabel inputLabel1;
+	private JLabel inputLabel2;
+	private JLabel resultLabel;
+	
 	private JButton addButton;
 	private JButton subtractButton;
 	private JButton multiplyButton;
 	private JButton divideButton;
+	
+	
+	
 
 	public CalculatorUI(TextConversionInterface textConversionService, CalculatorInterface calculatorService) {
 		this.textConversionService = textConversionService;
 		this.calculatorService = calculatorService;
 
+		String[] languages = { "English", "Turkish" };
+		languageComboBox = new JComboBox<>(languages);
+		
 		addButton = new JButton();
 		subtractButton = new JButton();
 		multiplyButton = new JButton();
@@ -34,32 +47,17 @@ public class CalculatorUI extends JFrame {
 		inputField1 = new JTextField(10);
 		inputField2 = new JTextField(10);
 		resultField = new JTextField(10);
-		//resultField.setEditable(false); // make the result field read-only
+		
+		inputLabel1 = new JLabel("");
+		inputLabel2 = new JLabel("");
+		resultLabel = new JLabel("");
+		
+		resultField.setEditable(false); // make the result field read-only
 
-		Locale locale = Locale.getDefault();
 
-		// Locale locale = new Locale("tr", "TR");
+		
 
-		if (locale.getLanguage().equals("tr")) {
-			// update the button and label texts to Turkish
-			addButton.setText("Topla");
-			subtractButton.setText("Çıkar");
-			multiplyButton.setText("Çarp");
-			divideButton.setText("Böl");
-
-			inputField1.setToolTipText("Sayı 1");
-			inputField2.setToolTipText("Sayı 2");
-			resultField.setToolTipText("Sonuç");
-		} else {
-			addButton.setText("Add");
-			subtractButton.setText("Subtract");
-			multiplyButton.setText("Multiply");
-			divideButton.setText("Divide");
-
-			inputField1.setToolTipText("Input 1");
-			inputField2.setToolTipText("Input 2");
-			resultField.setToolTipText("Result");
-		}
+		
 
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -79,14 +77,27 @@ public class CalculatorUI extends JFrame {
 		divideButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				performArithmeticOperation(CalculatorInterface.Operation.DIVIDE);
-			}
+			}	
 		});
+		
+		languageComboBox.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			        String selectedLanguage = (String) languageComboBox.getSelectedItem();
+
+			        // Call the updateUI method to update the user interface based on the selected language
+			        updateLocale(selectedLanguage);
+			    }
+		});
+		
+		updateLocale("English");
 
 		// create the UI layout
-		JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-		inputPanel.add(new JLabel(inputField1.getToolTipText() + ":"));
+		JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+		inputPanel.add(new JLabel(""));
+		inputPanel.add(languageComboBox);
+		inputPanel.add(inputLabel1);
 		inputPanel.add(inputField1);
-		inputPanel.add(new JLabel(inputField2.getToolTipText() + ":"));
+		inputPanel.add(inputLabel2);
 		inputPanel.add(inputField2);
 
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 4, 10, 10));
@@ -95,8 +106,8 @@ public class CalculatorUI extends JFrame {
 		buttonPanel.add(multiplyButton);
 		buttonPanel.add(divideButton);
 
-		JPanel resultPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-		resultPanel.add(new JLabel(resultField.getToolTipText() + ":"));
+		JPanel resultPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+		resultPanel.add(resultLabel);
 		resultPanel.add(resultField);
 
 		JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
@@ -110,7 +121,48 @@ public class CalculatorUI extends JFrame {
 		setContentPane(mainPanel);
 		pack();
 		setLocationRelativeTo(null);
+		
+		
+		
 	}
+	
+    private void updateLocale(String language) {
+        // Update the default locale based on the selected language
+        Locale locale = null;
+        if (language.equals("Turkish")) {
+            locale = new Locale("tr", "TR");
+            addButton.setText("Topla");
+			subtractButton.setText("Çıkar");
+			multiplyButton.setText("Çarp");
+			divideButton.setText("Böl");
+
+			languageComboBox.setToolTipText("Dil");
+			inputLabel1.setText("Sayı 1");
+			inputLabel2.setText("Sayı 2");
+			resultLabel.setText("Sonuç");
+
+			setTitle("Hesap Makinesi");
+        } else {
+            locale = Locale.ENGLISH;
+            addButton.setText("Add");
+			subtractButton.setText("Subtract");
+			multiplyButton.setText("Multiply");
+			divideButton.setText("Divide");
+
+			inputLabel1.setText("Input 1");
+			inputLabel2.setText("Input 2");
+			resultLabel.setText("Result");
+			
+			setTitle("Calculator");
+        }
+        inputField1.setText("");
+        inputField2.setText("");
+        resultField.setText("");
+        
+        Locale.setDefault(locale);        
+        textConversionService.setLocale(locale);
+        
+    }
 
 	private void performArithmeticOperation(CalculatorInterface.Operation operation) {
 
@@ -123,15 +175,15 @@ public class CalculatorUI extends JFrame {
 
 		BigDecimal result = BigDecimal.ZERO;
 
-		if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
+		if(input1.equals("") || input1.equals("")) {
+			resultText = "ERROR: Empty input(s).";
+		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
 			resultText = "ERROR: Invalid character in input(s).";
 		} else if (input2.equalsIgnoreCase("zero")) {
 			resultText = "ERROR: Cannot divide by zero.";
-		}
-		else if(value1 == null || value2 == null){
-				resultText = "ERROR: Invalid word(s) in input.";
-			}
-		else {
+		} else if (value1 == null || value2 == null) {
+			resultText = "ERROR: Invalid word(s) in input.";
+		} else {
 			switch (operation) {
 			case ADD:
 				result = calculatorService.add(value1, value2);
