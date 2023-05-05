@@ -6,7 +6,7 @@ import textconversion.TextConversionInterface;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Locale;
 
 public class CalculatorUI extends JFrame {
@@ -170,10 +170,10 @@ public class CalculatorUI extends JFrame {
 		String input2 = inputField2.getText();
 		String resultText = "";
 
-		BigDecimal value1 = textConversionService.convertTextToNumber(input1);
-		BigDecimal value2 = textConversionService.convertTextToNumber(input2);
+		BigInteger value1 = textConversionService.convertTextToNumber(input1);
+		BigInteger value2 = textConversionService.convertTextToNumber(input2);
 
-		BigDecimal result = BigDecimal.ZERO;
+		BigInteger result = BigInteger.ZERO;
 
 		if(input1.equals("") || input1.equals("")) {
 			resultText = "ERROR: Empty input(s).";
@@ -198,12 +198,8 @@ public class CalculatorUI extends JFrame {
 				System.out.print(value1 + " * " + value2 + " = " + result + "\n");
 				break;
 			case DIVIDE:
-				if (value2.equals(BigDecimal.ZERO))
-					result = null;
-				else {
 					result = calculatorService.divide(value1, value2);
 					System.out.print(value1 + " / " + value2 + " = " + result + "\n");
-				}
 				break;
 
 			}

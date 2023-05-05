@@ -1,6 +1,6 @@
 package calculator;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public interface CalculatorInterface {
 	public enum Operation {
@@ -10,11 +10,11 @@ public interface CalculatorInterface {
 		MULTIPLY
 	}
 
-	public BigDecimal add(BigDecimal num1, BigDecimal num2);
+	public BigInteger add(BigInteger num1, BigInteger num2);
 
-    public BigDecimal subtract(BigDecimal num1, BigDecimal num2);
+    public BigInteger subtract(BigInteger num1, BigInteger num2);
 
-    public BigDecimal multiply(BigDecimal num1, BigDecimal num2);
+    public BigInteger multiply(BigInteger num1, BigInteger num2);
 
-    public BigDecimal divide(BigDecimal num1, BigDecimal num2);
+    public BigInteger divide(BigInteger num1, BigInteger num2);
 }

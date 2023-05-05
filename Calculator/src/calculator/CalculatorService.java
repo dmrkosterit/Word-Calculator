@@ -1,28 +1,27 @@
 package calculator;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.math.BigInteger;
 
 public class CalculatorService implements CalculatorInterface {
     
 	@Override
-    public BigDecimal add(BigDecimal num1, BigDecimal num2) {
+    public BigInteger add(BigInteger num1, BigInteger num2) {
         return num1.add(num2);
     }
 
 	@Override
-    public BigDecimal subtract(BigDecimal num1, BigDecimal num2) {
+    public BigInteger subtract(BigInteger num1, BigInteger num2) {
         return num1.subtract(num2);
     }
 
 	@Override
-    public BigDecimal multiply(BigDecimal num1, BigDecimal num2) {
+    public BigInteger multiply(BigInteger num1, BigInteger num2) {
         return num1.multiply(num2);
     }
 
 	@Override
-    public BigDecimal divide(BigDecimal num1, BigDecimal num2) {
-        return num1.divide(num2, 2, RoundingMode.HALF_UP).setScale(0, RoundingMode.HALF_UP);
+    public BigInteger divide(BigInteger num1, BigInteger num2) {
+        return num1.divide(num2);
     }
 
 

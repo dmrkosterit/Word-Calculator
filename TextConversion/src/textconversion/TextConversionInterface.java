@@ -1,10 +1,10 @@
 package textconversion;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Locale;
 
 public interface TextConversionInterface {
-    BigDecimal convertTextToNumber(String text);
-    String convertNumberToText(BigDecimal number);
+    BigInteger convertTextToNumber(String text);
+    String convertNumberToText(BigInteger number);
     void setLocale(Locale locale);
 }

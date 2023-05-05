@@ -1,16 +1,14 @@
 package textconversion;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ArrayList;
 
 public class TextConversionService implements TextConversionInterface {
 
-	HashMap<String, BigDecimal> wordNumbers = new HashMap<String, BigDecimal>();
+	HashMap<String, BigInteger> wordNumbers = new HashMap<String, BigInteger>();
 	HashMap<Double, String> numberWords = new HashMap<Double, String>();
 
 	public TextConversionService() {
@@ -24,47 +22,47 @@ public class TextConversionService implements TextConversionInterface {
 
 		if (Locale.getDefault().getLanguage().equals("tr")) {
 
-			wordNumbers.put("sıfır", BigDecimal.valueOf(0.0));
-			wordNumbers.put("bir", BigDecimal.valueOf(1.0));
-			wordNumbers.put("iki", BigDecimal.valueOf(2.0));
-			wordNumbers.put("üç", BigDecimal.valueOf(3.0));
-			wordNumbers.put("dört", BigDecimal.valueOf(4.0));
-			wordNumbers.put("beş", BigDecimal.valueOf(5.0));
-			wordNumbers.put("altı", BigDecimal.valueOf(6.0));
-			wordNumbers.put("yedi", BigDecimal.valueOf(7.0));
-			wordNumbers.put("sekiz", BigDecimal.valueOf(8.0));
-			wordNumbers.put("dokuz", BigDecimal.valueOf(9.0));
-			wordNumbers.put("on", BigDecimal.valueOf(10.0));
-			wordNumbers.put("yirmi", BigDecimal.valueOf(20.0));
-			wordNumbers.put("otuz", BigDecimal.valueOf(30.0));
-			wordNumbers.put("kırk", BigDecimal.valueOf(40.0));
-			wordNumbers.put("elli", BigDecimal.valueOf(50.0));
-			wordNumbers.put("altmış", BigDecimal.valueOf(60.0));
-			wordNumbers.put("yetmiş", BigDecimal.valueOf(70.0));
-			wordNumbers.put("seksen", BigDecimal.valueOf(80.0));
-			wordNumbers.put("doksan", BigDecimal.valueOf(90.0));
-			wordNumbers.put("yüz", BigDecimal.valueOf(Math.pow(10, 2)));
-			wordNumbers.put("bin", BigDecimal.valueOf(Math.pow(10, 3)));
-			wordNumbers.put("milyon", BigDecimal.valueOf(Math.pow(10, 6)));
-			wordNumbers.put("milyar", BigDecimal.valueOf(Math.pow(10, 9)));
-			wordNumbers.put("trilyon", BigDecimal.valueOf(Math.pow(10, 12)));
-			wordNumbers.put("katrilyon", BigDecimal.valueOf(Math.pow(10, 15)));
-			wordNumbers.put("kentilyon", BigDecimal.valueOf(Math.pow(10, 18)));
-			wordNumbers.put("sekstilyon", BigDecimal.valueOf(Math.pow(10, 21)));
-			wordNumbers.put("septilyon", BigDecimal.valueOf(Math.pow(10, 24)));
-			wordNumbers.put("oktilyon", BigDecimal.valueOf(Math.pow(10, 27)));
-			wordNumbers.put("nonilyon", BigDecimal.valueOf(Math.pow(10, 30)));
-			wordNumbers.put("desilyon", BigDecimal.valueOf(Math.pow(10, 33)));
-			wordNumbers.put("undesilyon", BigDecimal.valueOf(Math.pow(10, 36)));
-			wordNumbers.put("dodesilyon", BigDecimal.valueOf(Math.pow(10, 39)));
-			wordNumbers.put("tredesilyon", BigDecimal.valueOf(Math.pow(10, 42)));
-			wordNumbers.put("katordesilyon", BigDecimal.valueOf(Math.pow(10, 45)));
-			wordNumbers.put("kendesilyon", BigDecimal.valueOf(Math.pow(10, 48)));
-			wordNumbers.put("seksdesilyon", BigDecimal.valueOf(Math.pow(10, 51)));
-			wordNumbers.put("septendesilyon", BigDecimal.valueOf(Math.pow(10, 54)));
-			wordNumbers.put("oktodesilyon", BigDecimal.valueOf(Math.pow(10, 57)));
-			wordNumbers.put("novemdesilyon", BigDecimal.valueOf(Math.pow(10, 60)));
-			wordNumbers.put("vigintilyon", BigDecimal.valueOf(Math.pow(10, 63)));
+			wordNumbers.put("sıfır", BigInteger.valueOf(0));
+			wordNumbers.put("bir", BigInteger.valueOf(1));
+			wordNumbers.put("iki", BigInteger.valueOf(2));
+			wordNumbers.put("üç", BigInteger.valueOf(3));
+			wordNumbers.put("dört", BigInteger.valueOf(4));
+			wordNumbers.put("beş", BigInteger.valueOf(5));
+			wordNumbers.put("altı", BigInteger.valueOf(6));
+			wordNumbers.put("yedi", BigInteger.valueOf(7));
+			wordNumbers.put("sekiz", BigInteger.valueOf(8));
+			wordNumbers.put("dokuz", BigInteger.valueOf(9));
+			wordNumbers.put("on", BigInteger.valueOf(10));
+			wordNumbers.put("yirmi", BigInteger.valueOf(20));
+			wordNumbers.put("otuz", BigInteger.valueOf(30));
+			wordNumbers.put("kırk", BigInteger.valueOf(40));
+			wordNumbers.put("elli", BigInteger.valueOf(50));
+			wordNumbers.put("altmış", BigInteger.valueOf(60));
+			wordNumbers.put("yetmiş", BigInteger.valueOf(70));
+			wordNumbers.put("seksen", BigInteger.valueOf(80));
+			wordNumbers.put("doksan", BigInteger.valueOf(90));
+			wordNumbers.put("yüz", BigInteger.TEN.pow(2));
+			wordNumbers.put("bin", BigInteger.TEN.pow(3));
+			wordNumbers.put("milyon", BigInteger.TEN.pow(6));
+			wordNumbers.put("milyar", BigInteger.TEN.pow(9));
+			wordNumbers.put("trilyon", BigInteger.TEN.pow(12));
+			wordNumbers.put("katrilyon", BigInteger.TEN.pow(15));
+			wordNumbers.put("kentilyon", BigInteger.TEN.pow(18));
+			wordNumbers.put("sekstilyon", BigInteger.TEN.pow(21));
+			wordNumbers.put("septilyon", BigInteger.TEN.pow(24));
+			wordNumbers.put("oktilyon", BigInteger.TEN.pow(27));
+			wordNumbers.put("nonilyon", BigInteger.TEN.pow(30));
+			wordNumbers.put("desilyon", BigInteger.TEN.pow(33));
+			wordNumbers.put("undesilyon", BigInteger.TEN.pow(36));
+			wordNumbers.put("dodesilyon", BigInteger.TEN.pow(39));
+			wordNumbers.put("tredesilyon", BigInteger.TEN.pow(42));
+			wordNumbers.put("katordesilyon", BigInteger.TEN.pow(45));
+			wordNumbers.put("kendesilyon", BigInteger.TEN.pow(48));
+			wordNumbers.put("seksdesilyon", BigInteger.TEN.pow(51));
+			wordNumbers.put("septendesilyon", BigInteger.TEN.pow(54));
+			wordNumbers.put("oktodesilyon", BigInteger.TEN.pow(57));
+			wordNumbers.put("novemdesilyon", BigInteger.TEN.pow(60));
+			wordNumbers.put("vigintilyon", BigInteger.TEN.pow(63));
 
 			numberWords.put(0.0, "sıfır");
 			numberWords.put(1.0, "bir");
@@ -110,58 +108,59 @@ public class TextConversionService implements TextConversionInterface {
 
 		} else {
 
-			wordNumbers.put("zero", BigDecimal.valueOf(0.0));
-			wordNumbers.put("a", BigDecimal.valueOf(1.0));
-			wordNumbers.put("one", BigDecimal.valueOf(1.0));
-			wordNumbers.put("two", BigDecimal.valueOf(2.0));
-			wordNumbers.put("three", BigDecimal.valueOf(3.0));
-			wordNumbers.put("four", BigDecimal.valueOf(4.0));
-			wordNumbers.put("five", BigDecimal.valueOf(5.0));
-			wordNumbers.put("six", BigDecimal.valueOf(6.0));
-			wordNumbers.put("seven", BigDecimal.valueOf(7.0));
-			wordNumbers.put("eight", BigDecimal.valueOf(8.0));
-			wordNumbers.put("nine", BigDecimal.valueOf(9.0));
-			wordNumbers.put("ten", BigDecimal.valueOf(10.0));
-			wordNumbers.put("eleven", BigDecimal.valueOf(11.0));
-			wordNumbers.put("twelve", BigDecimal.valueOf(12.0));
-			wordNumbers.put("thirteen", BigDecimal.valueOf(13.0));
-			wordNumbers.put("fourteen", BigDecimal.valueOf(14.0));
-			wordNumbers.put("fifteen", BigDecimal.valueOf(15.0));
-			wordNumbers.put("sixteen", BigDecimal.valueOf(16.0));
-			wordNumbers.put("seventeen", BigDecimal.valueOf(17.0));
-			wordNumbers.put("eighteen", BigDecimal.valueOf(18.0));
-			wordNumbers.put("nineteen", BigDecimal.valueOf(19.0));
-			wordNumbers.put("twenty", BigDecimal.valueOf(20.0));
-			wordNumbers.put("thirty", BigDecimal.valueOf(30.0));
-			wordNumbers.put("forty", BigDecimal.valueOf(40.0));
-			wordNumbers.put("fifty", BigDecimal.valueOf(50.0));
-			wordNumbers.put("sixty", BigDecimal.valueOf(60.0));
-			wordNumbers.put("seventy", BigDecimal.valueOf(70.0));
-			wordNumbers.put("eighty", BigDecimal.valueOf(80.0));
-			wordNumbers.put("ninety", BigDecimal.valueOf(90.0));
-			wordNumbers.put("hundred", BigDecimal.valueOf(Math.pow(10, 2)));
-			wordNumbers.put("thousand", BigDecimal.valueOf(Math.pow(10, 3)));
-			wordNumbers.put("million", BigDecimal.valueOf(Math.pow(10, 6)));
-			wordNumbers.put("billion", BigDecimal.valueOf(Math.pow(10, 9)));
-			wordNumbers.put("trillion", BigDecimal.valueOf(Math.pow(10, 12)));
-			wordNumbers.put("quadrillion", BigDecimal.valueOf(Math.pow(10, 15)));
-			wordNumbers.put("quintillion", BigDecimal.valueOf(Math.pow(10, 18)));
-			wordNumbers.put("sextillion", BigDecimal.valueOf(Math.pow(10, 21)));
-			wordNumbers.put("septillion", BigDecimal.valueOf(Math.pow(10, 24)));
-			wordNumbers.put("octillion", BigDecimal.valueOf(Math.pow(10, 27)));
-			wordNumbers.put("nonillion", BigDecimal.valueOf(Math.pow(10, 30)));
-			wordNumbers.put("decillion", BigDecimal.valueOf(Math.pow(10, 33)));
-			wordNumbers.put("undecillion", BigDecimal.valueOf(Math.pow(10, 36)));
-			wordNumbers.put("duodecillion", BigDecimal.valueOf(Math.pow(10, 39)));
-			wordNumbers.put("tredecillion", BigDecimal.valueOf(Math.pow(10, 42)));
-			wordNumbers.put("quattuordecillion", BigDecimal.valueOf(Math.pow(10, 45)));
-			wordNumbers.put("quindecillion", BigDecimal.valueOf(Math.pow(10, 48)));
-			wordNumbers.put("sexdecillion", BigDecimal.valueOf(Math.pow(10, 51)));
-			wordNumbers.put("septendecillion", BigDecimal.valueOf(Math.pow(10, 54)));
-			wordNumbers.put("octodecillion", BigDecimal.valueOf(Math.pow(10, 57)));
-			wordNumbers.put("novemdecillion", BigDecimal.valueOf(Math.pow(10, 60)));
-			wordNumbers.put("vigintillion", BigDecimal.valueOf(Math.pow(10, 63)));
-
+			wordNumbers.put("zero", BigInteger.ZERO);
+			wordNumbers.put("a", BigInteger.ONE);
+			wordNumbers.put("one", BigInteger.ONE);
+			wordNumbers.put("two", BigInteger.TWO);
+			wordNumbers.put("three", BigInteger.valueOf(3));
+			wordNumbers.put("four", BigInteger.valueOf(4));
+			wordNumbers.put("five", BigInteger.valueOf(5));
+			wordNumbers.put("six", BigInteger.valueOf(6));
+			wordNumbers.put("seven", BigInteger.valueOf(7));
+			wordNumbers.put("eight", BigInteger.valueOf(8));
+			wordNumbers.put("nine", BigInteger.valueOf(9));
+			wordNumbers.put("ten", BigInteger.TEN);
+			wordNumbers.put("eleven", BigInteger.valueOf(11));
+			wordNumbers.put("twelve", BigInteger.valueOf(12));
+			wordNumbers.put("thirteen", BigInteger.valueOf(13));
+			wordNumbers.put("fourteen", BigInteger.valueOf(14));
+			wordNumbers.put("fifteen", BigInteger.valueOf(15));
+			wordNumbers.put("sixteen", BigInteger.valueOf(16));
+			wordNumbers.put("seventeen", BigInteger.valueOf(17));
+			wordNumbers.put("eighteen", BigInteger.valueOf(18));
+			wordNumbers.put("nineteen", BigInteger.valueOf(19));
+			wordNumbers.put("twenty", BigInteger.valueOf(20));
+			wordNumbers.put("thirty", BigInteger.valueOf(30));
+			wordNumbers.put("forty", BigInteger.valueOf(40));
+			wordNumbers.put("fifty", BigInteger.valueOf(50));
+			wordNumbers.put("sixty", BigInteger.valueOf(60));
+			wordNumbers.put("seventy", BigInteger.valueOf(70));
+			wordNumbers.put("eighty", BigInteger.valueOf(80));
+			wordNumbers.put("ninety", BigInteger.valueOf(90));
+			wordNumbers.put("hundred", BigInteger.TEN.pow(2));
+			wordNumbers.put("thousand", BigInteger.TEN.pow(3));
+			wordNumbers.put("million", BigInteger.TEN.pow(6));
+			wordNumbers.put("billion", BigInteger.TEN.pow(9));
+			wordNumbers.put("trillion", BigInteger.TEN.pow(12));
+			wordNumbers.put("quadrillion", BigInteger.TEN.pow(15));
+			wordNumbers.put("quintillion", BigInteger.TEN.pow(18));
+			wordNumbers.put("sextillion", BigInteger.TEN.pow(21));
+			wordNumbers.put("septillion", BigInteger.TEN.pow(24));
+			wordNumbers.put("octillion", BigInteger.TEN.pow(27));
+			wordNumbers.put("nonillion", BigInteger.TEN.pow(30));
+			wordNumbers.put("decillion", BigInteger.TEN.pow(33));
+			wordNumbers.put("undecillion", BigInteger.TEN.pow(36));
+			wordNumbers.put("duodecillion", BigInteger.TEN.pow(39));
+			wordNumbers.put("tredecillion", BigInteger.TEN.pow(42));
+			wordNumbers.put("quattuordecillion", BigInteger.TEN.pow(45));
+			wordNumbers.put("quindecillion", BigInteger.TEN.pow(48));
+			wordNumbers.put("sexdecillion", BigInteger.TEN.pow(51));
+			wordNumbers.put("septendecillion", BigInteger.TEN.pow(54));
+			wordNumbers.put("octodecillion", BigInteger.TEN.pow(57));
+			wordNumbers.put("novemdecillion", BigInteger.TEN.pow(60));
+			wordNumbers.put("vigintillion", BigInteger.TEN.pow(63));
+			
+			
 			numberWords.put(0.0, "zero");
 			numberWords.put(1.0, "one");
 			numberWords.put(2.0, "two");
@@ -216,9 +215,9 @@ public class TextConversionService implements TextConversionInterface {
 	}
 
 	@Override
-	public BigDecimal convertTextToNumber(String input) {
-		BigDecimal total = BigDecimal.ZERO;
-		BigDecimal currentNumber = BigDecimal.ZERO;
+	public BigInteger convertTextToNumber(String input) {
+		BigInteger total = BigInteger.ZERO;
+		BigInteger currentNumber = BigInteger.ZERO;
 
 		boolean negative = false;
 
@@ -227,15 +226,12 @@ public class TextConversionService implements TextConversionInterface {
 		HashSet<String> set = new HashSet<>();
 		for (String s : words) {
 		    if (!set.add(s) && wordNumbers.get(s) != null) {
-		        if(wordNumbers.get(s).stripTrailingZeros().toPlainString().length() > 3 || (s.equals("minus") || s.equals("eksi")))
+		        if(wordNumbers.get(s).toString().length() > 3 || (s.equals("minus") || s.equals("eksi")))
 		        	return null;
 		    }
 		}
 		
-		
-	
-		
-		List<BigDecimal> numbers = new ArrayList<BigDecimal>();
+		ArrayList<BigInteger> numbers = new ArrayList<BigInteger>();
 		
 		for(String word : words) {
 			if( !(word.equalsIgnoreCase("eksi") || word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("and"))) {
@@ -254,48 +250,36 @@ public class TextConversionService implements TextConversionInterface {
 			negative = true;
 		
 		for (int i = 0; i < numbers.size(); i++) {
-			BigDecimal value = numbers.get(i);
-
-			
+			BigInteger value = numbers.get(i);
 			
 			if (value != null) {
 				if (i != 0) {
-					currentNumber = currentNumber.stripTrailingZeros();
-					total = total.stripTrailingZeros();
-					value = value.stripTrailingZeros();
 					if (
-							//(i != 0 && wordNumbers.get(words[i - 1]).toPlainString().length() == wordNumbers.get(words[i]).toPlainString().length())
-							// ( i == (words.length - 1) && value.toPlainString().length() < total.toPlainString().length() && (value.toPlainString().length() >= 3) && words.length > 2 && currentNumber.compareTo(BigDecimal.ZERO) == 0)
-							//|| (total.compareTo(BigDecimal.ZERO) != 0 && currentNumber.compareTo(BigDecimal.ZERO) == 0 && value.toPlainString().length() > 3)
-							//( total.compareTo(BigDecimal.ZERO) > 0 && value.toPlainString().length() + 2 >= total.toPlainString().length() && value.compareTo(BigDecimal.valueOf(100)) > 0)
-							
-							//(!currentNumber.equals(BigDecimal.ZERO) && numberWordswords[i - 1] )
-							 (currentNumber.toPlainString().length() == 1 && value.toPlainString().length() == 2 && currentNumber.compareTo(BigDecimal.ZERO) != 0) // iki altmış
-							|| (currentNumber.toPlainString().length() == 2 && value.toPlainString().length() == 3) // altmış yüz
-							|| (currentNumber.toPlainString().length() == 2 && value.toPlainString().length() == 2) // on bir bin elli bir altmış
-							|| (currentNumber.toPlainString().length() == 1 && value.toPlainString().length() == 1 && currentNumber.compareTo(BigDecimal.ZERO) != 0) // bir iki üç dört beş bin
-							|| (currentNumber.toPlainString().length() == 3 && value.toPlainString().length() == 3) // altı yüz elli sekiz yüz
-							|| (currentNumber.toPlainString().length() == 3 && currentNumber.remainder(BigDecimal.valueOf(100)).compareTo(BigDecimal.ZERO) != 0 && value.toPlainString().length() == 2) // beş yüz bir altmış
-							|| (total.toPlainString().length() >= 3 && value.toPlainString().length() > total.toPlainString().length())// beş yüz on bir bin elli beş milyon
+							 (currentNumber.toString().length() == 1 && value.toString().length() == 2 && currentNumber.compareTo(BigInteger.ZERO) != 0) // iki altmış
+							|| (currentNumber.toString().length() == 2 && value.toString().length() == 3) // altmış yüz
+							|| (currentNumber.toString().length() == 2 && value.toString().length() == 2) // on bir bin elli bir altmış
+							|| (currentNumber.toString().length() == 1 && value.toString().length() == 1 && currentNumber.compareTo(BigInteger.ZERO) != 0) // bir iki üç dört beş bin
+							|| (currentNumber.toString().length() == 3 && value.toString().length() == 3) // altı yüz elli sekiz yüz
+							|| (currentNumber.toString().length() == 3 && currentNumber.remainder(BigInteger.valueOf(100)).compareTo(BigInteger.ZERO) != 0 && value.toString().length() == 2) // beş yüz bir altmış
+							|| (total.toString().length() >= 3 && value.toString().length() > total.toString().length())// beş yüz on bir bin elli beş milyon
 							)
 						return null;
 					}
 			}
 
-			
-				
-
-					if (value.compareTo(new BigDecimal(100)) == 0) {
+					if (value.compareTo(BigInteger.valueOf(100)) == 0) {
 						currentNumber = currentNumber.multiply(value);
-						if (currentNumber.compareTo(BigDecimal.ZERO) == 0)
+						if (currentNumber.compareTo(BigInteger.ZERO) == 0)
 							currentNumber = currentNumber.add(value);
-					} else if (value.compareTo(new BigDecimal(100)) < 0) {
+					} else if (value.compareTo(BigInteger.valueOf(100)) < 0) {
 						currentNumber = currentNumber.add(value);
 					} else {
-						if (currentNumber.compareTo(BigDecimal.ZERO) != 0) {
+						if (currentNumber.compareTo(BigInteger.ZERO) != 0) {
 							total = total.add(currentNumber.multiply(value));
-							currentNumber = BigDecimal.ZERO;
-						} else {
+							currentNumber = BigInteger.ZERO;
+						} else if(currentNumber.compareTo(BigInteger.ZERO) == 0) {
+							return null;
+					} else {
 							total = total.add(value);
 						}
 					}
@@ -306,22 +290,22 @@ public class TextConversionService implements TextConversionInterface {
 		
 		total = total.add(currentNumber);
 		if (negative)
-			total = total.multiply(BigDecimal.valueOf(-1));
+			total = total.multiply(BigInteger.valueOf(-1));
 		return total;
 
 	}
 
 	@Override
-	public String convertNumberToText(BigDecimal input) {
-		BigDecimal number = input;
+	public String convertNumberToText(BigInteger input) {
+		BigInteger number = input;
 
-		if (number.compareTo(BigDecimal.ZERO) == 0) {
+		if (number.compareTo(BigInteger.ZERO) == 0) {
 			return numberWords.get(0.0);
 		}
 
 		String result = "";
 
-		if (number.compareTo(BigDecimal.ZERO) == -1) {
+		if (number.compareTo(BigInteger.ZERO) == -1) {
 			if (Locale.getDefault().getLanguage().equals("tr"))
 				result += "eksi ";
 			else
@@ -330,21 +314,20 @@ public class TextConversionService implements TextConversionInterface {
 			number = number.negate();
 		}
 
-		if (number.compareTo(BigDecimal.valueOf(Math.pow(10, 3))) >= 0) {
+		if (number.compareTo(BigInteger.TEN.pow(3)) >= 0) {
 
-			for (double pow = 63.0; pow >= 3; pow -= 3) {
-				if (number.compareTo(BigDecimal.valueOf(Math.pow(10, pow))) >= 0) {
-					BigDecimal digit = number.divide(BigDecimal.valueOf(Math.pow(10, pow)), 0, RoundingMode.FLOOR);
+			for (int pow = 63; pow >= 3; pow -= 3) {
+				if (number.compareTo(BigInteger.TEN.pow(pow)) >= 0) {
+					BigInteger digit = number.divide(BigInteger.TEN.pow(pow));
 
-					if (digit.compareTo(BigDecimal.ONE) == 0
-							&& Locale.getDefault().getLanguage().equals("tr")
+					if (digit.compareTo(BigInteger.ONE) == 0 && Locale.getDefault().getLanguage().equals("tr")
 							&& numberWords.get(Math.pow(10, pow)).equalsIgnoreCase("bin"))
-						
+
 						result += numberWords.get(Math.pow(10, pow));
 					else
 						result += (convertNonExponentToText(digit)) + (" ") + (numberWords.get(Math.pow(10, pow)));
-					number = number.remainder(BigDecimal.valueOf(Math.pow(10, pow)));
-					if (number.compareTo(BigDecimal.valueOf(0)) > 0) {
+					number = number.remainder(BigInteger.TEN.pow(pow));
+					if (number.compareTo(BigInteger.valueOf(0)) > 0) {
 						result += (" ");
 					}
 				}
@@ -356,25 +339,25 @@ public class TextConversionService implements TextConversionInterface {
 		return result.replaceAll("bir yüz", "yüz").replaceAll("  ", " ");
 	}
 
-	public String convertNonExponentToText(BigDecimal number) {
+	public String convertNonExponentToText(BigInteger number) {
 
 		String result = "";
 
-		if (number.compareTo(BigDecimal.valueOf(100)) >= 0) {
-			BigDecimal hundreds = number.divide(BigDecimal.valueOf(100), 0, RoundingMode.FLOOR);
+		if (number.compareTo(BigInteger.valueOf(100)) >= 0) {
+			BigInteger hundreds = number.divide(BigInteger.valueOf(100));
 			result += (numberWords.get(hundreds.doubleValue())) + (" ") + (numberWords.get(100.0));
-			number = number.remainder(BigDecimal.valueOf(100));
-			if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
+			number = number.remainder(BigInteger.valueOf(100));
+			if (number.compareTo(BigInteger.valueOf(0)) >= 0) {
 				result += (" ");
 			}
 		}
 
-		if (number.compareTo(BigDecimal.valueOf(0)) > 0) {
+		if (number.compareTo(BigInteger.valueOf(0)) > 0) {
 			if (result.length() > 0 && !Locale.getDefault().getLanguage().equals("tr")) {
 				result += ("and ");
 			}
 
-			if (number.compareTo(BigDecimal.valueOf(20)) < 0 && !Locale.getDefault().getLanguage().equals("tr")) {
+			if (number.compareTo(BigInteger.valueOf(20)) < 0 && !Locale.getDefault().getLanguage().equals("tr")) {
 				result += (numberWords.get(number.doubleValue()));
 			} else {
 				double tens = Math.floor(number.doubleValue() / 10);
@@ -382,7 +365,7 @@ public class TextConversionService implements TextConversionInterface {
 					result += (numberWords.get(tens * 10));
 				double ones = Math.floor(number.doubleValue() % 10);
 				if (ones >= 1) {
-					if (number.compareTo(BigDecimal.ZERO) == -1 || tens >= 1)
+					if (number.compareTo(BigInteger.ZERO) == -1 || tens >= 1)
 						result += " " + numberWords.get(ones);
 					else
 						result += (numberWords.get(ones));
