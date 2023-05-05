@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.HashSet;
 
 public class TextConversionService implements TextConversionInterface {
 
@@ -46,8 +47,8 @@ public class TextConversionService implements TextConversionInterface {
 			wordNumbers.put("milyar", BigDecimal.valueOf(Math.pow(10, 9)));
 			wordNumbers.put("trilyon", BigDecimal.valueOf(Math.pow(10, 12)));
 			wordNumbers.put("katrilyon", BigDecimal.valueOf(Math.pow(10, 15)));
-			wordNumbers.put("sekstilyon", BigDecimal.valueOf(Math.pow(10, 18)));
-			wordNumbers.put("sextillion", BigDecimal.valueOf(Math.pow(10, 21)));
+			wordNumbers.put("kentilyon", BigDecimal.valueOf(Math.pow(10, 18)));
+			wordNumbers.put("sekstilyon", BigDecimal.valueOf(Math.pow(10, 21)));
 			wordNumbers.put("septilyon", BigDecimal.valueOf(Math.pow(10, 24)));
 			wordNumbers.put("oktilyon", BigDecimal.valueOf(Math.pow(10, 27)));
 			wordNumbers.put("nonilyon", BigDecimal.valueOf(Math.pow(10, 30)));
@@ -56,7 +57,7 @@ public class TextConversionService implements TextConversionInterface {
 			wordNumbers.put("dodesilyon", BigDecimal.valueOf(Math.pow(10, 39)));
 			wordNumbers.put("tredesilyon", BigDecimal.valueOf(Math.pow(10, 42)));
 			wordNumbers.put("katordesilyon", BigDecimal.valueOf(Math.pow(10, 45)));
-			wordNumbers.put("kenddesilyon", BigDecimal.valueOf(Math.pow(10, 48)));
+			wordNumbers.put("kendesilyon", BigDecimal.valueOf(Math.pow(10, 48)));
 			wordNumbers.put("seksdesilyon", BigDecimal.valueOf(Math.pow(10, 51)));
 			wordNumbers.put("septendesilyon", BigDecimal.valueOf(Math.pow(10, 54)));
 			wordNumbers.put("oktodesilyon", BigDecimal.valueOf(Math.pow(10, 57)));
@@ -220,29 +221,57 @@ public class TextConversionService implements TextConversionInterface {
 		boolean negative = false;
 
 		String[] words = input.replaceAll("-", " ").toLowerCase().split(" ");
-
+		
+		HashSet<String> set = new HashSet<>();
+		for (String s : words) {
+		    if (!set.add(s) && wordNumbers.get(s) != null) {
+		        if(wordNumbers.get(s).stripTrailingZeros().toPlainString().length() > 3 || (s.equals("minus") || s.equals("eksi")))
+		        	return null;
+		    }
+		}
+		
 		if (words[0].equalsIgnoreCase("minus") || words[0].equalsIgnoreCase("eksi"))
 			negative = true;
-
+	
+		
+		
+		
 		for (int i = 0; i < words.length; i++) {
 			String word = words[i];
 			BigDecimal value = wordNumbers.get(word);
 
-			if (value != null) {
-				if (i != 0 && words.length >= 2) {
-					if ((word.equals("minus") && word.equals("eksi"))
-							|| (wordNumbers.get(words[i - 1]).compareTo(BigDecimal.TEN) < 0
-									&& wordNumbers.get(words[i]).compareTo(BigDecimal.TEN) < 0))
+			
+			
+			if (value != null && !word.equalsIgnoreCase("and")) {
+				if (i != 0 && words.length >= 2 /*&& (!words[i - 1].equalsIgnoreCase("and"))*/) {
+					if(word.equals("eksi") || word.equals("minus"))
 						return null;
+					currentNumber = currentNumber.stripTrailingZeros();
+					total = total.stripTrailingZeros();
+					value = value.stripTrailingZeros();
+					if (
+							//(i != 0 && wordNumbers.get(words[i - 1]).toPlainString().length() == wordNumbers.get(words[i]).toPlainString().length())
+							 ( i == (words.length - 1) && value.toPlainString().length() < total.toPlainString().length() && (value.toPlainString().length() >= 3) && words.length > 2 && currentNumber.compareTo(BigDecimal.ZERO) == 0)
+							|| ( total.compareTo(BigDecimal.ZERO) > 0 && value.toPlainString().length() + 2 >= total.toPlainString().length() && value.compareTo(BigDecimal.valueOf(100)) > 0)
+							|| (currentNumber.toPlainString().length() == 2 && value.toPlainString().length() == 3)
+							|| (currentNumber.toPlainString().length() == 1 && value.toPlainString().length() == 2 && currentNumber.compareTo(BigDecimal.ZERO) != 0)
+							|| (total.compareTo(BigDecimal.ZERO) != 0 && currentNumber.compareTo(BigDecimal.ZERO) == 0 && value.toPlainString().length() > 3)
+							|| (currentNumber.toPlainString().length() == 2 && value.toPlainString().length() == 2) // on bir bin elli bir altmış
+							|| (currentNumber.toPlainString().length() == 1 && value.toPlainString().length() == 1 && currentNumber.compareTo(BigDecimal.ZERO) != 0) // bir iki üç dört beş bin
+							)
+						return null;
+					}
+			}
 
-				}
-
-				if (value != null && (!word.equalsIgnoreCase("minus") || !word.equalsIgnoreCase("eksi") || !word.equalsIgnoreCase("and"))) {
+			if (!word.equalsIgnoreCase("minus") && !word.equalsIgnoreCase("eksi") && !word.equalsIgnoreCase("and"))
+				if (value == null)
+					return null;
+				else {
 
 					if (value.compareTo(new BigDecimal(100)) == 0) {
 						currentNumber = currentNumber.multiply(value);
-							if(currentNumber.compareTo(BigDecimal.ZERO) == 0)
-								return null;
+						if (currentNumber.compareTo(BigDecimal.ZERO) == 0)
+							currentNumber = currentNumber.add(value);
 					} else if (value.compareTo(new BigDecimal(100)) < 0) {
 						currentNumber = currentNumber.add(value);
 					} else {
@@ -254,12 +283,10 @@ public class TextConversionService implements TextConversionInterface {
 						}
 					}
 				}
-
-			} else {
-				return null;
-			}
+			
 
 		}
+		
 		total = total.add(currentNumber);
 		if (negative)
 			total = total.multiply(BigDecimal.valueOf(-1));
@@ -291,20 +318,23 @@ public class TextConversionService implements TextConversionInterface {
 			for (double pow = 63.0; pow >= 3; pow -= 3) {
 				if (number.compareTo(BigDecimal.valueOf(Math.pow(10, pow))) >= 0) {
 					BigDecimal digit = number.divide(BigDecimal.valueOf(Math.pow(10, pow)), 0, RoundingMode.FLOOR);
-					
-					if(digit.compareTo(BigDecimal.ONE) == 0 && numberWords.get(Math.pow(10, pow)).equalsIgnoreCase("thousand") && Locale.getDefault().getLanguage().equals("tr"))
+
+					if (digit.compareTo(BigDecimal.ONE) == 0
+							&& numberWords.get(Math.pow(10, pow)).equalsIgnoreCase("bin")
+							&& Locale.getDefault().getLanguage().equals("tr"))
 						result += numberWords.get(Math.pow(10, pow));
 					else
 						result += (convertNonExponentToText(digit)) + (" ") + (numberWords.get(Math.pow(10, pow)));
 					number = number.remainder(BigDecimal.valueOf(Math.pow(10, pow)));
-					if (number.compareTo(BigDecimal.valueOf(0)) >= 0) {
+					if (number.compareTo(BigDecimal.valueOf(0)) > 0) {
 						result += (" ");
 					}
 				}
 			}
 		}
 
-		if(!Locale.getDefault().getLanguage().equals("tr") && number.compareTo(BigDecimal.valueOf(100)) < 0 && !result.equals("") && ((!result.equals("minus ")) || !result.equals("eksi ")))
+		if (!Locale.getDefault().getLanguage().equals("tr") && number.compareTo(BigDecimal.valueOf(0)) > 0
+				&& !result.equals("") && ((!result.equals("minus ")) || !result.equals("eksi ")))
 			result += (" and ");
 		result += convertNonExponentToText(number);
 

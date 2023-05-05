@@ -177,7 +177,7 @@ public class CalculatorUI extends JFrame {
 
 		if(input1.equals("") || input1.equals("")) {
 			resultText = "ERROR: Empty input(s).";
-		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
+		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ-]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
 			resultText = "ERROR: Invalid character in input(s).";
 		} else if ((input2.equalsIgnoreCase("zero") || input2.equalsIgnoreCase("sıfır")) && operation == CalculatorInterface.Operation.DIVIDE) {
 			resultText = "ERROR: Cannot divide by zero.";
