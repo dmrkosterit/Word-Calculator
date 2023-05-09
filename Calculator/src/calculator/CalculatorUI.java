@@ -8,37 +8,40 @@ import java.awt.*;
 import java.awt.event.*;
 import java.math.BigInteger;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class CalculatorUI extends JFrame {
+
+	private ResourceBundle errors;
 
 	private TextConversionInterface textConversionService;
 	private CalculatorInterface calculatorService;
 
 	private JComboBox<String> languageComboBox;
-	
+
 	private JTextField inputField1;
 	private JTextField inputField2;
 	private JTextField resultField;
-	
+
 	private JLabel inputLabel1;
 	private JLabel inputLabel2;
 	private JLabel resultLabel;
-	
+
 	private JButton addButton;
 	private JButton subtractButton;
 	private JButton multiplyButton;
 	private JButton divideButton;
-	
-	
-	
 
 	public CalculatorUI(TextConversionInterface textConversionService, CalculatorInterface calculatorService) {
 		this.textConversionService = textConversionService;
 		this.calculatorService = calculatorService;
-
-		String[] languages = { "English", "Turkish" };
-		languageComboBox = new JComboBox<>(languages);
 		
+		errors = ResourceBundle.getBundle("resources.errors_en");
+
+		String[] languages = { "English" , "Türkçe" };
+		languageComboBox = new JComboBox<>(languages);
+
+
 		addButton = new JButton();
 		subtractButton = new JButton();
 		multiplyButton = new JButton();
@@ -47,17 +50,12 @@ public class CalculatorUI extends JFrame {
 		inputField1 = new JTextField(10);
 		inputField2 = new JTextField(10);
 		resultField = new JTextField(10);
-		
+
 		inputLabel1 = new JLabel("");
 		inputLabel2 = new JLabel("");
 		resultLabel = new JLabel("");
-		
-		resultField.setEditable(false); // make the result field read-only
 
-
-		
-
-		
+		resultField.setEditable(false);
 
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -77,21 +75,27 @@ public class CalculatorUI extends JFrame {
 		divideButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				performArithmeticOperation(CalculatorInterface.Operation.DIVIDE);
-			}	
+			}
 		});
-		
+
 		languageComboBox.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-			        String selectedLanguage = (String) languageComboBox.getSelectedItem();
-
-			        // Call the updateUI method to update the user interface based on the selected language
-			        updateLocale(selectedLanguage);
-			    }
+			public void actionPerformed(ActionEvent e) {
+				String selectedLanguage = (String) languageComboBox.getSelectedItem();
+				if (selectedLanguage.equals("Türkçe")) {
+		            updateLocale(new Locale("tr"));
+		        } else {
+		        	updateLocale(Locale.ENGLISH);
+		        }
+			}
 		});
 		
-		updateLocale("English");
+		if(Locale.getDefault().getLanguage().equalsIgnoreCase("tr"))
+			languageComboBox.setSelectedItem("Türkçe");
+		else
+			languageComboBox.setSelectedItem("English");
 
-		// create the UI layout
+		
+		
 		JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
 		inputPanel.add(new JLabel(""));
 		inputPanel.add(languageComboBox);
@@ -122,16 +126,15 @@ public class CalculatorUI extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		
-		
+		setSize(450,250);
 		
 	}
-	
-    private void updateLocale(String language) {
-        // Update the default locale based on the selected language
-        Locale locale = null;
-        if (language.equals("Turkish")) {
-            locale = new Locale("tr", "TR");
-            addButton.setText("Topla");
+
+	private void updateLocale(Locale locale) {
+		Locale.setDefault(locale);
+		if (locale.getLanguage().equalsIgnoreCase("tr")) {
+			errors = ResourceBundle.getBundle("resources.errors_tr");
+			addButton.setText("Topla");
 			subtractButton.setText("Çıkar");
 			multiplyButton.setText("Çarp");
 			divideButton.setText("Böl");
@@ -140,11 +143,13 @@ public class CalculatorUI extends JFrame {
 			inputLabel1.setText("Sayı 1");
 			inputLabel2.setText("Sayı 2");
 			resultLabel.setText("Sonuç");
+			
+			
 
 			setTitle("Hesap Makinesi");
-        } else {
-            locale = Locale.ENGLISH;
-            addButton.setText("Add");
+		} else {
+			errors = ResourceBundle.getBundle("resources.errors_en");
+			addButton.setText("Add");
 			subtractButton.setText("Subtract");
 			multiplyButton.setText("Multiply");
 			divideButton.setText("Divide");
@@ -152,17 +157,17 @@ public class CalculatorUI extends JFrame {
 			inputLabel1.setText("Input 1");
 			inputLabel2.setText("Input 2");
 			resultLabel.setText("Result");
-			
+
 			setTitle("Calculator");
-        }
-        inputField1.setText("");
-        inputField2.setText("");
-        resultField.setText("");
-        
-        Locale.setDefault(locale);        
-        textConversionService.setLocale(locale);
-        
-    }
+		}
+		inputField1.setText("");
+		inputField2.setText("");
+		resultField.setText("");
+
+		
+		textConversionService.setLocale(locale);
+		
+	}
 
 	private void performArithmeticOperation(CalculatorInterface.Operation operation) {
 
@@ -175,14 +180,15 @@ public class CalculatorUI extends JFrame {
 
 		BigInteger result = BigInteger.ZERO;
 
-		if(input1.equals("") || input1.equals("")) {
-			resultText = "ERROR: Empty input(s).";
+		if (input1.equals("") || input1.equals("")) {
+			resultText = errors.getString("error.empty.input");
 		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ-]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
-			resultText = "ERROR: Invalid character in input(s).";
-		} else if ((input2.equalsIgnoreCase("zero") || input2.equalsIgnoreCase("sıfır")) && operation == CalculatorInterface.Operation.DIVIDE) {
-			resultText = "ERROR: Cannot divide by zero.";
+			resultText = errors.getString("error.invalid.character");
+		} else if ((input2.equalsIgnoreCase("zero") || input2.equalsIgnoreCase("sıfır"))
+				&& operation == CalculatorInterface.Operation.DIVIDE) {
+			resultText = errors.getString("error.division.by.zero");
 		} else if (value1 == null || value2 == null) {
-			resultText = "ERROR: Invalid format/word(s) in input.";
+			resultText = errors.getString("error.invalid.format");
 		} else {
 			switch (operation) {
 			case ADD:
@@ -198,15 +204,13 @@ public class CalculatorUI extends JFrame {
 				System.out.print(value1 + " * " + value2 + " = " + result + "\n");
 				break;
 			case DIVIDE:
-					result = calculatorService.divide(value1, value2);
-					System.out.print(value1 + " / " + value2 + " = " + result + "\n");
+				result = calculatorService.divide(value1, value2);
+				System.out.print(value1 + " / " + value2 + " = " + result + "\n");
 				break;
 
 			}
 			resultText = textConversionService.convertNumberToText(result);
 		}
-
-		// convert the result to words
 
 		resultField.setText(resultText);
 	}
