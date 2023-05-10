@@ -35,12 +35,11 @@ public class CalculatorUI extends JFrame {
 	public CalculatorUI(TextConversionInterface textConversionService, CalculatorInterface calculatorService) {
 		this.textConversionService = textConversionService;
 		this.calculatorService = calculatorService;
-		
+
 		errors = ResourceBundle.getBundle("resources.errors_en");
 
-		String[] languages = { "English" , "Türkçe" };
+		String[] languages = { "English", "Türkçe" };
 		languageComboBox = new JComboBox<>(languages);
-
 
 		addButton = new JButton();
 		subtractButton = new JButton();
@@ -82,20 +81,18 @@ public class CalculatorUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String selectedLanguage = (String) languageComboBox.getSelectedItem();
 				if (selectedLanguage.equals("Türkçe")) {
-		            updateLocale(new Locale("tr"));
-		        } else {
-		        	updateLocale(Locale.ENGLISH);
-		        }
+					updateLocale(new Locale("tr"));
+				} else {
+					updateLocale(Locale.ENGLISH);
+				}
 			}
 		});
-		
-		if(Locale.getDefault().getLanguage().equalsIgnoreCase("tr"))
+
+		if (Locale.getDefault().getLanguage().equalsIgnoreCase("tr"))
 			languageComboBox.setSelectedItem("Türkçe");
 		else
 			languageComboBox.setSelectedItem("English");
 
-		
-		
 		JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
 		inputPanel.add(new JLabel(""));
 		inputPanel.add(languageComboBox);
@@ -125,9 +122,9 @@ public class CalculatorUI extends JFrame {
 		setContentPane(mainPanel);
 		pack();
 		setLocationRelativeTo(null);
-		
-		setSize(450,250);
-		
+
+		setSize(450, 250);
+
 	}
 
 	private void updateLocale(Locale locale) {
@@ -143,8 +140,6 @@ public class CalculatorUI extends JFrame {
 			inputLabel1.setText("Sayı 1");
 			inputLabel2.setText("Sayı 2");
 			resultLabel.setText("Sonuç");
-			
-			
 
 			setTitle("Hesap Makinesi");
 		} else {
@@ -164,9 +159,8 @@ public class CalculatorUI extends JFrame {
 		inputField2.setText("");
 		resultField.setText("");
 
-		
 		textConversionService.setLocale(locale);
-		
+
 	}
 
 	private void performArithmeticOperation(CalculatorInterface.Operation operation) {
@@ -182,7 +176,8 @@ public class CalculatorUI extends JFrame {
 
 		if (input1.equals("") || input1.equals("")) {
 			resultText = errors.getString("error.empty.input");
-		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ-]+$") || !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
+		} else if (!input1.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ-]+$")
+				|| !input2.matches("^[\\p{L}\\p{Z}öçğıüşÖÇĞİÜŞ]+$")) {
 			resultText = errors.getString("error.invalid.character");
 		} else if ((input2.equalsIgnoreCase("zero") || input2.equalsIgnoreCase("sıfır"))
 				&& operation == CalculatorInterface.Operation.DIVIDE) {

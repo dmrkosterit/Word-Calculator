@@ -8,26 +8,26 @@ import textconversion.TextConversionService;
 
 public class CalculatorActivator implements BundleActivator {
 
-    private CalculatorService calculatorService;
-    private TextConversionService textConversionService;
-    private CalculatorUI calculatorUI;
+	private CalculatorService calculatorService;
+	private TextConversionService textConversionService;
+	private CalculatorUI calculatorUI;
 
-    public void start(BundleContext context) {
-    	
-        ServiceReference<TextConversionService> ref = context.getServiceReference(TextConversionService.class);
-        textConversionService = context.getService(ref);
+	public void start(BundleContext context) {
 
-        calculatorService = new CalculatorService();
+		ServiceReference<TextConversionService> ref = context.getServiceReference(TextConversionService.class);
+		textConversionService = context.getService(ref);
 
-        calculatorUI = new CalculatorUI(textConversionService, calculatorService);
-        calculatorUI.setVisible(true);
-        
-        System.out.println("Calculator Service Started.");
-    }
+		calculatorService = new CalculatorService();
 
-    public void stop(BundleContext context) {
-        calculatorUI.dispose();
-        context.ungetService(context.getServiceReference(TextConversionService.class));
-        System.out.println("Calculator Service Stopped.");
-    }
+		calculatorUI = new CalculatorUI(textConversionService, calculatorService);
+		calculatorUI.setVisible(true);
+
+		System.out.println("Calculator Service Started.");
+	}
+
+	public void stop(BundleContext context) {
+		calculatorUI.dispose();
+		context.ungetService(context.getServiceReference(TextConversionService.class));
+		System.out.println("Calculator Service Stopped.");
+	}
 }

@@ -218,103 +218,98 @@ public class TextConversionService implements TextConversionInterface {
 
 	@Override
 	public BigInteger convertTextToNumber(String input) {
-		BigInteger total = BigInteger.ZERO;
-		BigInteger currentNumber = BigInteger.ZERO;
-
-		boolean negative = false;
-
-		String[] words = input.replaceAll("-", " ").toLowerCase().split(" ");
-
-		ArrayList<BigInteger> numbers = new ArrayList<BigInteger>();
 		
-		HashSet<String> set = new HashSet<>();
-
-		if(words[0].equalsIgnoreCase("and"))
+		String[] words = input.trim().split("\\s+");
+		
+		if(words.length == 1 && (words[0].equals("minus") || words[0].equals("eksi")))
 			return null;
 		
+		boolean negative = false;
 		
-		if(words[0].equalsIgnoreCase("minus") || words[0].equalsIgnoreCase("eksi"))
-			if ((words[0].equalsIgnoreCase("minus") && Locale.getDefault().getLanguage().equals("en")) || (words[0].equalsIgnoreCase("eksi") && Locale.getDefault().getLanguage().equals("tr")))
+		if (
+		// and five
+		(words[0].equalsIgnoreCase("and"))
+				// minus and five
+				|| ((words[0].equalsIgnoreCase("minus") || words[0].equals("eksi")) && words[1].equals("and")))
+			return null;
+
+		if (words[0].equalsIgnoreCase("minus") || words[0].equalsIgnoreCase("eksi"))
+			if ((words[0].equalsIgnoreCase("minus") && Locale.getDefault().getLanguage().equals("en"))
+					|| (words[0].equalsIgnoreCase("eksi") && Locale.getDefault().getLanguage().equals("tr")))
 				negative = true;
-			else /*minus beş, eksi five*/
+			else /* minus beş, eksi five */
 				return null;
 		
 		
-		
+		BigInteger total = BigInteger.ZERO;
+		BigInteger currentNumber = BigInteger.ZERO;
+
+		HashSet<String> set = new HashSet<>();
+
 		for (int i = 0; i < words.length; i++) {
 			String word = words[i];
 			BigInteger value = wordNumbers.get(word);
 
-			if (!set.add(word) && value != null) {
-				if (value.toString().length() > 3) //beş_milyon_altı_milyon
-					return null;
-			}
-
-			if (i != 0 && (word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("eksi"))) //eksi_eksi_beş
+			if (i != 0 && (word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("eksi"))) // eksi eksi beş
 				return null;
 
-			if (!(word.equalsIgnoreCase("eksi") || word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("and"))) 
-				if (value == null && word.equals(""))
+			if (!set.add(word) && value != null) {
+				if (value.toString().length() > 3) // beş milyon altı milyon
+					return null;
+			}
+
+			if (!(word.equalsIgnoreCase("eksi") || word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("and")))
+				if (value == null)
 					return null;
 
-			
-
-			///aite
-			
-			
-			
-			
-			
 			if (value != null) {
 				if (
-						(currentNumber.toString().length() == 1 && value.toString().length() == 2 && currentNumber.compareTo(BigInteger.ZERO) != 0)  /*iki_altmış*/
-						|| (currentNumber.toString().length() == 2 && value.toString().length() == 3) /*altmış_yüz*/
-						|| (currentNumber.toString().length() == 2 && value.toString().length() == 2) /*on_bir_bin_elli_bir_altmış*/
-						|| (currentNumber.toString().length() == 1 && value.toString().length() == 1 && currentNumber.compareTo(BigInteger.ZERO) != 0) /*bir_iki_üç_dört_beş_bin*/
-						|| (currentNumber.toString().length() == 3 && value.toString().length() == 3)  /*altı_yüz_elli_sekiz_yüz */
-						|| (currentNumber.remainder(BigInteger.valueOf(10)).compareTo(BigInteger.ZERO) != 0  && value.toString().length() == 1) /*beş_yüz_altmış_bir_bir*/
-						|| (currentNumber.toString().length() == 3 && currentNumber.remainder(BigInteger.valueOf(100)).compareTo(BigInteger.ZERO) != 0 && value.toString().length() == 2) /*beş_yüz_bir_altmış*/
-						|| (total.toString().length() >= 3 && value.toString().length() > total.toString().length()) /* beş_yüz_on_bir_bin_elli_beş_milyon*/ 
-						|| (value.toString().length() > 4 && currentNumber.equals(BigInteger.ZERO))) /*milyon_bir,katrilyon_bir */
+				// iki altmış
+				(currentNumber.toString().length() == 1 && value.toString().length() == 2
+						&& currentNumber.compareTo(BigInteger.ZERO) != 0)
+						// altmış yüz
+						|| (currentNumber.toString().length() == 2 && value.toString().length() == 3)
+						// on bir bin elli bir altmış
+						|| (currentNumber.toString().length() == 2 && value.toString().length() == 2)
+						// bir iki üç dört beş bin
+						|| (currentNumber.toString().length() == 1 && value.toString().length() == 1
+								&& currentNumber.compareTo(BigInteger.ZERO) != 0)
+						// altı yüz elli sekiz yüz
+						|| (currentNumber.toString().length() == 3 && value.toString().length() == 3)
+						// beş yüz altmış bir bir
+						|| (currentNumber.remainder(BigInteger.valueOf(10)).compareTo(BigInteger.ZERO) != 0
+								&& value.toString().length() == 1)
+						// beş yüz bir altmış
+						|| (currentNumber.toString().length() == 3
+								&& currentNumber.remainder(BigInteger.valueOf(100)).compareTo(BigInteger.ZERO) != 0
+								&& value.toString().length() == 2)
+						// beş yüz on bir bin elli beş milyon
+						|| (total.toString().length() >= 3 && value.toString().length() > total.toString().length())
+						// milyon bir, katrilyon bir
+						|| (value.toString().length() > 4 && currentNumber.equals(BigInteger.ZERO))
+						// bir milyon bir bin, bir bin
+						|| (value.equals(BigInteger.valueOf(1000)) && currentNumber.equals(BigInteger.ONE))) {
 					return null;
-		}
+				}
 
-		if (value.compareTo(BigInteger.valueOf(100)) == 0) { 
-			currentNumber = currentNumber.multiply(value);
-			if (currentNumber.compareTo(BigInteger.ZERO) == 0)
-				if (!Locale.getDefault().getLanguage().equals("tr")) //one_thousand_hundred_sixty_five
-					return null;
-				else
+				if (value.compareTo(BigInteger.valueOf(100)) == 0) {
+					currentNumber = currentNumber.multiply(value);
+					if (currentNumber.compareTo(BigInteger.ZERO) == 0)
+						if (!Locale.getDefault().getLanguage().equals("tr")) // one thousand hundred sixty five
+							return null;
+						else
+							currentNumber = currentNumber.add(value);
+				} else if (value.compareTo(BigInteger.valueOf(100)) < 0) {
 					currentNumber = currentNumber.add(value);
-		} else if (value.compareTo(BigInteger.valueOf(100)) < 0) {
-			currentNumber = currentNumber.add(value);
-		} else {
-			if (currentNumber.compareTo(BigInteger.ZERO) != 0) {
-				total = total.add(currentNumber.multiply(value));
-				currentNumber = BigInteger.ZERO;
-			} else {
-				total = total.add(value);
+				} else {
+					if (currentNumber.compareTo(BigInteger.ZERO) != 0) {
+						total = total.add(currentNumber.multiply(value));
+						currentNumber = BigInteger.ZERO;
+					} else {
+						total = total.add(value);
+					}
+				}
 			}
-		}
-			
-			
-			
-			
-			
-			
-			///aite
-			
-
-		}
-		
-		
-
-		
-
-		for (int i = 0; i < numbers.size(); i++) {
-			BigInteger value = numbers.get(i);
-
-			
 		}
 
 		total = total.add(currentNumber);
