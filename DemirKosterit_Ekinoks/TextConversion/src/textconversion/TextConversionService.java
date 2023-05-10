@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.HashSet;
-import java.util.ArrayList;
 
 public class TextConversionService implements TextConversionInterface {
 
@@ -218,14 +217,14 @@ public class TextConversionService implements TextConversionInterface {
 
 	@Override
 	public BigInteger convertTextToNumber(String input) {
-		
+
 		String[] words = input.trim().split("\\s+");
-		
-		if(words.length == 1 && (words[0].equals("minus") || words[0].equals("eksi")))
+
+		if (words.length == 1 && (words[0].equals("minus") || words[0].equals("eksi")))
 			return null;
-		
+
 		boolean negative = false;
-		
+
 		if (
 		// and five
 		(words[0].equalsIgnoreCase("and"))
@@ -239,8 +238,7 @@ public class TextConversionService implements TextConversionInterface {
 				negative = true;
 			else /* minus beş, eksi five */
 				return null;
-		
-		
+
 		BigInteger total = BigInteger.ZERO;
 		BigInteger currentNumber = BigInteger.ZERO;
 
@@ -253,10 +251,9 @@ public class TextConversionService implements TextConversionInterface {
 			if (i != 0 && (word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("eksi"))) // eksi eksi beş
 				return null;
 
-			if (!set.add(word) && value != null) {
+			if (!set.add(word) && value != null)
 				if (value.toString().length() > 3) // beş milyon altı milyon
 					return null;
-			}
 
 			if (!(word.equalsIgnoreCase("eksi") || word.equalsIgnoreCase("minus") || word.equalsIgnoreCase("and")))
 				if (value == null)
@@ -288,9 +285,12 @@ public class TextConversionService implements TextConversionInterface {
 						// milyon bir, katrilyon bir
 						|| (value.toString().length() > 4 && currentNumber.equals(BigInteger.ZERO))
 						// bir milyon bir bin, bir bin
-						|| (value.equals(BigInteger.valueOf(1000)) && currentNumber.equals(BigInteger.ONE))) {
+						|| (value.equals(BigInteger.valueOf(1000)) && currentNumber.equals(BigInteger.ONE)
+								&& Locale.getDefault().getLanguage().equalsIgnoreCase("tr"))
+						// one million thousand
+						|| (value.compareTo(BigInteger.valueOf(1000)) >= 0 && currentNumber.equals(BigInteger.ZERO)
+								&& Locale.getDefault().equals(Locale.ENGLISH)))
 					return null;
-				}
 
 				if (value.compareTo(BigInteger.valueOf(100)) == 0) {
 					currentNumber = currentNumber.multiply(value);
@@ -362,7 +362,7 @@ public class TextConversionService implements TextConversionInterface {
 		return result.replaceAll("bir yüz", "yüz").replaceAll("  ", " ");
 	}
 
-	public String convertNonExponentToText(BigInteger number) {
+	private String convertNonExponentToText(BigInteger number) {
 
 		String result = "";
 
