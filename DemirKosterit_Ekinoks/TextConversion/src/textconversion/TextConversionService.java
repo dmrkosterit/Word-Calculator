@@ -218,7 +218,7 @@ public class TextConversionService implements TextConversionInterface {
 	@Override
 	public BigInteger convertTextToNumber(String input) {
 
-		String[] words = input.trim().split("\\s+");
+		String[] words = input.trim().toLowerCase().split("\\s+");
 
 		if (words.length == 1 && (words[0].equals("minus") || words[0].equals("eksi")))
 			return null;
@@ -289,7 +289,10 @@ public class TextConversionService implements TextConversionInterface {
 								&& Locale.getDefault().getLanguage().equalsIgnoreCase("tr"))
 						// one million thousand
 						|| (value.compareTo(BigInteger.valueOf(1000)) >= 0 && currentNumber.equals(BigInteger.ZERO)
-								&& Locale.getDefault().equals(Locale.ENGLISH)))
+								&& Locale.getDefault().equals(Locale.ENGLISH))
+						// one million one hundred zero sixty five
+						|| (value.equals(BigInteger.ZERO) && words.length > 1)
+						)
 					return null;
 
 				if (value.compareTo(BigInteger.valueOf(100)) == 0) {
