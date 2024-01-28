@@ -1,0 +1,2 @@
+This is a calculator that utilizes OSGi framework and works by getting numbers in the form of words as input, and displays the calculation result the same way. Can handle calculations up to vigintillion.
+Although at first glance a calculator might seem too simple, converting numbers to words and properly handling edge cases is a really intuitive way to practice analytical thinking for coding! Feel free to check out the code and challenge yourself!
